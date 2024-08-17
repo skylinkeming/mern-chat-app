@@ -1,4 +1,14 @@
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
+import { useState } from "react";
+
 export default function Login() {
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
+  const { loading, login } = useLogin();
+
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
@@ -15,6 +25,11 @@ export default function Login() {
               type="text"
               placeholder="Enter username"
               className="w-full input input-bordered h-10"
+              onChange={(e) =>
+                setInputs((curInputs) => {
+                  return { ...curInputs, username: e.target.value };
+                })
+              }
             />
           </div>
           <label className="label">
@@ -24,15 +39,29 @@ export default function Login() {
             type="password"
             placeholder="Enter password"
             className="w-full input input-bordered h-10"
+            onChange={(e) =>
+              setInputs((curInputs) => {
+                return { ...curInputs, password: e.target.value };
+              })
+            }
           />
-          <a
-            href="#"
+          <Link
+            to="/signup"
             className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block"
           >
             {"Don't "}have an account?
-          </a>
+          </Link>
           <div>
-            <button className="btn btn-block btn-sm mt-2">Login</button>
+            <button
+              className="btn btn-block btn-sm mt-2"
+              disabled={loading}
+              onClick={(e) => {
+                e.preventDefault();
+                login(inputs.username, inputs.password);
+              }}
+            >
+              Login
+            </button>
           </div>
         </form>
       </div>
